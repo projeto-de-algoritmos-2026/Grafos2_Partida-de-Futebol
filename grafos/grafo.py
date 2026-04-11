@@ -11,10 +11,10 @@ class Grafo:
         else:
             return False
 
-    def adicionar_aresta(self, v1, v2):
+    def adicionar_aresta(self, v1, v2, peso):
         if v1 in self.vertices and v2 in self.vertices:
-            self.vertices [v1].adicionar_vizinho(v2)
-            self.vertices [v2].adicionar_vizinho(v1)
+            self.vertices[v1].adicionar_vizinho(v2, peso)
+            self.vertices[v2].adicionar_vizinho(v1, peso)
             return True
         else:
             return False
