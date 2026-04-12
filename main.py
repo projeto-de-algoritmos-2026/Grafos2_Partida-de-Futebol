@@ -60,8 +60,17 @@ def montar_time():
 # -> minha parte (algoritmos)
 
 def get_min_distance_node(distances, unvisited):
-    # Etapa 3: Varre dists nao visitadas pra pegar o menor valor
-    pass
+    # Etapa 3: Varre as distâncias dos nós ainda não visitados
+    min_dist = float('infinity')
+    min_node = None
+    
+    # Compara a distância salva pra descobrir qual tem o passe mais "rápido" até agora
+    for no in unvisited:
+        if distances[no] < min_dist:
+            min_dist = distances[no]
+            min_node = no
+            
+    return min_node
 
 def dijkstra(graph, start_name, end_name):
     # logica principal de achar o caminho
@@ -99,9 +108,6 @@ def dijkstra(graph, start_name, end_name):
 def reconstruct_path(predecessors, start_name, end_name):
     # voltar a partir do ultimo no
     pass
-
-
-# -> minha parte (visual/pygame)
 
 def draw_soccer_field(screen):
     screen.fill(GREEN)
@@ -151,11 +157,16 @@ def main():
     clock = pygame.time.Clock()
 
     grafo = montar_time()
-    
-    # Mantendo o print do terminal feito pela Marys para fins de validação
-    print("Grafo:")
-    for v in grafo:
-        print(f"{v.id}: {v.vizinhos}")
+
+    # print("Grafo:")
+    # for v in grafo:
+    #     print(f"{v.id}: {v.vizinhos}")
+
+    # print("\n--- TESTE DO DIJKSTRA (Etapas 1, 2 e 3) ---")
+    # teste_predecessores = dijkstra(grafo, "Goleiro", "Centroavante")
+    # print("O algoritmo rodou com sucesso! Veja quem antecede quem no caminho ideal:")
+    # for no_destino, origem_anterior in teste_predecessores.items():
+    #     print(f"Para o passe chegar em '{no_destino}', a bola veio de: '{origem_anterior}'")
 
     # Definindo a fonte visual
     font_jogs = pygame.font.Font(None, 18)
@@ -168,14 +179,6 @@ def main():
 
         # Fundo e marcações do campo
         draw_soccer_field(screen)
-        
-        # desenhar as arestas gerais
-        # draw_connections(screen, grafo, posicoes_tela)
-
-        # desenhar caminho do dijkstra
-        # path = dijkstra(grafo, "Goleiro", "Centroavante")
-        # se tiver caminho, pinta ele dps de desenhar tudo:
-        # draw_shortest_path(screen, path, posicoes_tela)
 
         # renderizando jogadores 
         for v in grafo:
