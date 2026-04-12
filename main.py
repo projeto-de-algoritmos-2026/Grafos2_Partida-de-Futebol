@@ -56,11 +56,8 @@ def montar_time():
 
     return grafo
 
-
-# -> minha parte (algoritmos)
-
 def get_min_distance_node(distances, unvisited):
-    # Etapa 3: Varre as distâncias dos nós ainda não visitados
+    # varre as distâncias dos nós ainda não visitados
     min_dist = float('infinity')
     min_node = None
     
@@ -164,8 +161,18 @@ def draw_connections(screen, graph, pos_dict):
             pygame.draw.line(screen, GRAY, pos_origem, pos_destino, 2)
 
 def draw_shortest_path(screen, path, pos_dict):
-    # pinta a linha por cima do caminho encontrado
-    pass
+    # destaque do Caminho Ótimo
+    if path:
+        for i in range(len(path) - 1):
+            no_atual = path[i]
+            proximo_no = path[i+1]
+            
+            pos_origem = pos_dict[no_atual]
+            pos_destino = pos_dict[proximo_no]
+            
+            # Linha amarela super grossa com borda
+            pygame.draw.line(screen, BLACK, pos_origem, pos_destino, 8)
+            pygame.draw.line(screen, YELLOW, pos_origem, pos_destino, 4)
 
 
 def main():
@@ -176,18 +183,12 @@ def main():
 
     grafo = montar_time()
 
-    # print("Grafo:")
-    # for v in grafo:
-    #     print(f"{v.id}: {v.vizinhos}")
-
-    # print("\n--- TESTE DO DIJKSTRA (Etapas 1, 2 e 3) ---")
-    # teste_predecessores = dijkstra(grafo, "Goleiro", "Centroavante")
-    # print("O algoritmo rodou com sucesso! Veja quem antecede quem no caminho ideal:")
-    # for no_destino, origem_anterior in teste_predecessores.items():
-    #     print(f"Para o passe chegar em '{no_destino}', a bola veio de: '{origem_anterior}'")
-
     # Definindo a fonte visual
     font_jogs = pygame.font.Font(None, 18)
+
+    # PROCESSAMENTO DO CÉREBRO: O Dijkstra roda 1 única vez antes do Pygame iniciar de fato pros 60 FPS
+    predecessores_resultado = dijkstra(grafo, "Goleiro", "Centroavante")
+    caminho_perfeito = reconstruct_path(predecessores_resultado, "Goleiro", "Centroavante")
 
     running = True
     while running:
@@ -200,8 +201,11 @@ def main():
 
         # Desenha as arestas cinzas mostrando estrutura de passe (Commit 5)
         draw_connections(screen, grafo, posicoes_tela)
+        
+        # Desenha o caminho genial em amarelo destacando por cima das linhas apagadas!
+        draw_shortest_path(screen, caminho_perfeito, posicoes_tela)
 
-        # renderizando jogadores 
+        # renderizando jogadores  
         for v in grafo:
             pos = posicoes_tela[v.id]
             # Sombra/Contorno
