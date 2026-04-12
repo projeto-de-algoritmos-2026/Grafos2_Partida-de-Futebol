@@ -106,8 +106,22 @@ def dijkstra(graph, start_name, end_name):
     return predecessores
 
 def reconstruct_path(predecessors, start_name, end_name):
-    # voltar a partir do ultimo no
-    pass
+    # reconstrução do caminho ótimo
+    caminho_tracado = []
+    no_atual = end_name
+    
+    # Voltamos a lista de trás pra frente (do destino para a origem)
+    while no_atual is not None:
+        caminho_tracado.insert(0, no_atual)
+        if no_atual == start_name:
+            break
+        no_atual = predecessors.get(no_atual)
+        
+    # Validando se ele de fato conseguiu achar um caminho que conecte a origem e o fim
+    if caminho_tracado[0] == start_name:
+        return caminho_tracado
+    else:
+        return []
 
 def draw_soccer_field(screen):
     screen.fill(GREEN)
