@@ -7,8 +7,8 @@ Conteúdo da Disciplina: Grafos<br>
 
 | Perfil | Matrícula | Aluno |
 | :---: | :---: | :--- |
-| <a href="https://github.com/Maliz30"><img src="https://github.com/Maliz30.png" width="50" style="border-radius: 50%;"></a> | `21/1063210` | **Maria Alice Bernardo da Costa Silva** <br> [@Maliz30](https://github.com/Maliz30) |
-| <a href="https://github.com/MilenaBaruc"><img src="https://github.com/MilenaBaruc.png" width="50" style="border-radius: 50%;"></a> | `21/1062339` | **Milena Baruc Rodrigues Morais** <br> [@MilenaBaruc](https://github.com/MilenaBaruc) |
+| <a href="https://github.com/Maliz30"><img src="https://github.com/Maliz30.png" width="50" style="border-radius: 50%;"></a> | `211063210` | **Maria Alice Bernardo da Costa Silva** <br> [@Maliz30](https://github.com/Maliz30) |
+| <a href="https://github.com/MilenaBaruc"><img src="https://github.com/MilenaBaruc.png" width="50" style="border-radius: 50%;"></a> | `211062339` | **Milena Baruc Rodrigues Morais** <br> [@MilenaBaruc](https://github.com/MilenaBaruc) |
 
 ## ℹ️ Sobre 
 O projeto tem como objetivo exibir o funcionamento do algoritmo **Dijkstra**, que realiza a busca do menor caminho em um grafo ponderado.
