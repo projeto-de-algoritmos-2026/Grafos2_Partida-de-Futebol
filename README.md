@@ -33,10 +33,13 @@ pip install -r requirements.txt
 ```
 
 ### Pré-requisitos
-- Ter o Python instalado
+- **Ter o Python instalado**:
+  - **Windows:** Baixe e instale pelo [site oficial (python.org)](https://www.python.org/downloads/) ou pela Microsoft Store. Confirme se a opção "Add Python to PATH" foi marcada na instalação.
+  - **Linux (Ubuntu/Debian):** Rode `sudo apt update && sudo apt install python3 python3-venv` no terminal.
+  - **Mac:** Utilize o instalador oficial ou rode `brew install python` caso utilize o Homebrew.
 
 ## Uso 
-1. Execute o comando: `python main.py`
+1. Execute o comando: `python mapa.py` (ou `python3 mapa.py`)
 2. **Selecionar Origem**: Clique no jogador que está com a posse de bola.
 3. **Selecionar Destino**: Clique no jogador para quem deseja realizar o passe final.
 4. **Visualizar**: O sistema destacará o caminho de passes que minimiza a distância total percorrida pela bola.
