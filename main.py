@@ -157,7 +157,11 @@ def draw_soccer_field(screen):
 
 def draw_connections(screen, graph, pos_dict):
     # desenha as linhas cinzas pra mostrar os passes que da pra fazer
-    pass
+    for vertice in graph:
+        pos_origem = pos_dict[vertice.id]
+        for vizinho_id in vertice.vizinhos.keys():
+            pos_destino = pos_dict[vizinho_id]
+            pygame.draw.line(screen, GRAY, pos_origem, pos_destino, 2)
 
 def draw_shortest_path(screen, path, pos_dict):
     # pinta a linha por cima do caminho encontrado
@@ -193,6 +197,9 @@ def main():
 
         # Fundo e marcações do campo
         draw_soccer_field(screen)
+
+        # Desenha as arestas cinzas mostrando estrutura de passe (Commit 5)
+        draw_connections(screen, grafo, posicoes_tela)
 
         # renderizando jogadores 
         for v in grafo:
