@@ -44,9 +44,21 @@ rodando = True
 clock = pygame.time.Clock()
 
 while rodando:
+    pos_mouse = pygame.mouse.get_pos()
+
     for evento in pygame.event.get():
         if evento.type == pygame.QUIT:
             rodando = False
+        
+        if evento.type == pygame.MOUSEBUTTONDOWN:
+            if evento.button == 1:
+                
+                for id_jogador, centro in posicoes.items():
+                    img = imgs[id_jogador]
+                    rect_jogador = img.get_rect(center=centro)
+                    
+                    if rect_jogador.collidepoint(pos_mouse):
+                        print(f"O {id_jogador} foi clicado")
 
     tela.fill(VERDE_CAMPO)
 
