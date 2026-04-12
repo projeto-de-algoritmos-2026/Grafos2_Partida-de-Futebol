@@ -25,11 +25,21 @@ O cenário desenvolvido se baseia em uma formação tática de futebol. No siste
 Linguagem: Python 3<br>
 Biblioteca Gráfica: Pygame
 
+```bash
+python3 -m venv venv
+source venv/bin/activate  # Linux/Mac
+# .\venv\Scripts\Activate.ps1 # Windows
+pip install -r requirements.txt
+```
+
 ### Pré-requisitos
 - Ter o Python instalado
 
 ## Uso 
-<!-- Explique como usar seu projeto caso haja algum passo a passo após o comando de execução. -->
+1. Execute o comando: `python main.py`
+2. **Selecionar Origem**: Clique no jogador que está com a posse de bola.
+3. **Selecionar Destino**: Clique no jogador para quem deseja realizar o passe final.
+4. **Visualizar**: O sistema destacará o caminho de passes que minimiza a distância total percorrida pela bola.
 
 ## Outros 
 <!-- Quaisquer outras informações sobre seu projeto podem ser descritas abaixo. -->
