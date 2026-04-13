@@ -1,29 +1,29 @@
 import pygame
-from grafos import Grafo, Vertice
+from logica.grafos import Grafo, Vertice
+from logica import dijkstra, reconstruct_path
+from ui import draw_soccer_field, draw_connections, draw_shortest_path
+from ui.constantes import LARGURA, ALTURA, VERDE_CAMPO, BRANCO, CINZA, AMARELO, PRETO
 
-LARGURA = 1500
-ALTURA = 800
-VERDE_CAMPO = (34, 139, 34)
-BRANCO = (255, 255, 255)
-CINZA = (150, 150, 150)
-AMARELO = (255, 255, 0)
-PRETO = (0, 0, 0)
+imgs = {}
+tamanho_img = (120, 120)
+tamanho_img_goleiro = (120, 100)
+
+no_origem = None
+no_destino = None
+caminho_calculado = []
 
 pygame.init()
 
 tela = pygame.display.set_mode((LARGURA, ALTURA))
 pygame.display.set_caption("Partida de Futebol")
 
-imgs = {}
-tamanho_img = (120, 120)
-tamanho_img_goleiro = (120, 100)
 
 try:
     posicoes_nomes = ['CA', 'LD', 'LE', 'MD', 'ME', 'PD', 'PE', 'VOL', 'ZD', 'ZE']
     for nome in posicoes_nomes:
-        imgs[nome] = pygame.transform.scale(pygame.image.load(f"src/jogadores_brasil/{nome}.png"), tamanho_img)
+        imgs[nome] = pygame.transform.scale(pygame.image.load(f"assets/jogadores_brasil/{nome}.png"), tamanho_img)
 
-    imgs['GL_A']= pygame.transform.scale(pygame.image.load("src/jogadores_brasil/GL_A.png"), tamanho_img_goleiro)
+    imgs['GL_A']= pygame.transform.scale(pygame.image.load("assets/jogadores_brasil/GL_A.png"), tamanho_img_goleiro)
 
 except pygame.error as e:
     print(f"Erro ao carregar imagens: {e}")
@@ -69,78 +69,6 @@ def montar_time(posicoes_dit):
     return grafo
 
 grafo_oficial = montar_time(posicoes)
-
-# -> ALGORITMOS (Cerebro Dijkstra)
-def get_min_distance_node(distances, unvisited):
-    min_dist = float('infinity')
-    min_node = None
-    for no in unvisited:
-        if distances[no] < min_dist:
-            min_dist = distances[no]
-            min_node = no
-    return min_node
-
-def dijkstra(graph, start_name, end_name=None):
-    distancias = {v.id: float('infinity') for v in graph}
-    distancias[start_name] = 0
-    predecessores = {v.id: None for v in graph}
-    nao_visitados = [v.id for v in graph]
-    
-    while nao_visitados:
-        no_atual = get_min_distance_node(distancias, nao_visitados)
-        if no_atual is None or distancias[no_atual] == float('infinity'):
-            break 
-            
-        vertice_atual = graph.vertices[no_atual]
-        for vizinho_id, peso in vertice_atual.vizinhos.items():
-            if vizinho_id in nao_visitados:
-                nova_dist = distancias[no_atual] + peso
-                if nova_dist < distancias[vizinho_id]:
-                    distancias[vizinho_id] = nova_dist
-                    predecessores[vizinho_id] = no_atual
-                    
-        nao_visitados.remove(no_atual)
-        if end_name and no_atual == end_name:
-            break
-    return predecessores
-
-def reconstruct_path(predecessors, start_name, end_name):
-    caminho_tracado = []
-    no_atual = end_name
-    while no_atual is not None:
-        caminho_tracado.insert(0, no_atual)
-        if no_atual == start_name:
-            break
-        no_atual = predecessors.get(no_atual)
-        
-    if caminho_tracado[0] == start_name:
-        return caminho_tracado
-    else:
-        return []
-
-# -> VISUAIS 
-def draw_connections(screen, graph, pos_dict):
-    for vertice in graph:
-        pos_origem = pos_dict[vertice.id]
-        for vizinho_id in vertice.vizinhos.keys():
-            pos_destino = pos_dict[vizinho_id]
-            pygame.draw.line(screen, CINZA, pos_origem, pos_destino, 2)
-
-def draw_shortest_path(screen, path, pos_dict):
-    if path:
-        for i in range(len(path) - 1):
-            no_atual = path[i]
-            proximo_no = path[i+1]
-            pos_origem = pos_dict[no_atual]
-            pos_destino = pos_dict[proximo_no]
-            # Linha amarela super grossa com borda
-            pygame.draw.line(screen, PRETO, pos_origem, pos_destino, 12)
-            pygame.draw.line(screen, AMARELO, pos_origem, pos_destino, 8)
-
-# VARIAVEIS DE ESTADO DA INTERACAO
-no_origem = None
-no_destino = None
-caminho_calculado = []
 
 rodando = True
 clock = pygame.time.Clock()
