@@ -17,7 +17,38 @@ O cenário desenvolvido se baseia em uma formação tática de futebol. No siste
 
 
 ## 🖼️ Screenshots
-<!-- Adicione 3 ou mais screenshots do projeto em funcionamento. -->
+
+Ao rodar o projeto com o comando:
+
+``bash
+python3 mapa.py
+``
+
+irá aparecer a tela de todos os jogadores como mostra na imagem abaixo.
+
+<div align="center">
+
+![Imagem 1](assets/Prints/Tela.png)
+*Imagem 1 - Tela dos Jogadores*
+
+</div>
+
+O primeiro passo é selecionar o jogador que irá começar com a bola, como é mostrado na imagem abaixo.
+
+<div align="center">
+
+![Imagem 2](assets/Prints/SelecInic.png)
+*Imagem 2 - Ao selecionar o começo da jogada*
+
+</div>
+
+O próximo passo é definir o destino da bola. O sistema então calcula e exibe o menor caminho para que ela chegue mais rapidamente, conforme ilustrado abaixo.
+<div align="center">
+
+![Imagem 3](assets/Prints/SelectFim.png)
+*Imagem 3 - Ao selecionar onde a bola deve chegar*
+
+</div>
 
 ## 🎥 Video
 <!-- [Apresentação]() -->
@@ -44,13 +75,3 @@ pip install -r requirements.txt
 2. **Selecionar Origem**: Clique no jogador que está com a posse de bola.
 3. **Selecionar Destino**: Clique no jogador para quem deseja realizar o passe final.
 4. **Visualizar**: O sistema destacará o caminho de passes que minimiza a distância total percorrida pela bola.
-
-## 📝 Outros 
- git pull origin main --no-rebase
-From https://github.com/projeto-de-algoritmos-2026/G53_Grafos_PA-26.1
- * branch            main       -> FETCH_HEAD
-Updating f82985e..b7316c4
-error: Your local changes to the following files would be overwritten by merge:
-        README.md
-Please commit your changes or stash them before you merge.
-Aborting
