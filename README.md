@@ -1,4 +1,4 @@
-# Partida de futebol ⚽️🏟️🇧🇷
+# Partida de futebol ⚽️🏟️
 
 Número da Lista: 53<br>
 Conteúdo da Disciplina: Grafos<br>

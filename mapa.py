@@ -1,8 +1,8 @@
 import pygame
 from logica.grafos import Grafo, Vertice
 from logica import dijkstra, reconstruct_path
-from ui import draw_soccer_field, draw_connections, draw_shortest_path
-from ui.constantes import LARGURA, ALTURA, VERDE_CAMPO, BRANCO, CINZA, AMARELO, PRETO
+from ui import draw_soccer_field, draw_connections, draw_shortest_path, desenha_campo
+from ui.constantes import LARGURA, ALTURA, RED, PRETO
 
 imgs = {}
 tamanho_img = (120, 120)
@@ -16,7 +16,6 @@ pygame.init()
 
 tela = pygame.display.set_mode((LARGURA, ALTURA))
 pygame.display.set_caption("Partida de Futebol")
-
 
 try:
     posicoes_nomes = ['CA', 'LD', 'LE', 'MD', 'ME', 'PD', 'PE', 'VOL', 'ZD', 'ZE']
@@ -94,7 +93,7 @@ while rodando:
                             caminho_calculado = []
                         elif no_destino is None and id_jogador != no_origem:
                             no_destino = id_jogador
-                            # Dispara o algoritmo pesado 
+
                             pred = dijkstra(grafo_oficial, no_origem, no_destino)
                             caminho_calculado = reconstruct_path(pred, no_origem, no_destino)
                         else:
@@ -103,33 +102,9 @@ while rodando:
                             no_destino = None
                             caminho_calculado = []
 
-    tela.fill(VERDE_CAMPO)
+    desenha_campo(tela)
 
-    largura_linha = 5
-    margin = 50 
-    campo_largura = LARGURA - (2 * margin)
-    campo_altura = ALTURA - (2 * margin)
-
-    pygame.draw.rect(tela, BRANCO, (margin, margin, campo_largura, campo_altura), largura_linha)
-    pygame.draw.line(tela, BRANCO, (LARGURA // 2, margin), (LARGURA // 2, ALTURA - margin), largura_linha)
-    pygame.draw.circle(tela, BRANCO, (LARGURA // 2, ALTURA // 2), 100, largura_linha)
-    pygame.draw.circle(tela, BRANCO, (LARGURA // 2, ALTURA // 2), 7)
-
-    def desenhar_areas(lado):
-        x_base = margin if lado == "esq" else LARGURA - margin
-        grande_area_largura, grande_area_altura = 220, 400
-        pygame.draw.rect(tela, BRANCO, (x_base if lado == "esq" else x_base - grande_area_largura, (ALTURA // 2) - (grande_area_altura // 2), grande_area_largura, grande_area_altura), largura_linha)
-
-        pequena_area_largura, pequena_area_altura = 70, 150
-        pygame.draw.rect(tela, BRANCO, (x_base if lado == "esq" else x_base - pequena_area_largura, (ALTURA // 2) - (pequena_area_altura // 2), pequena_area_largura, pequena_area_altura), largura_linha)
-
-    desenhar_areas("esq")
-    desenhar_areas("dir")
-
-    # Desenha o passaporte visual de fundo
     draw_connections(tela, grafo_oficial, posicoes)
-    
-    # Desenha o caminho se ele tiver sido calculado!
     draw_shortest_path(tela, caminho_calculado, posicoes)
 
     for id_jogador, img in imgs.items():
@@ -137,9 +112,9 @@ while rodando:
         
         # se for a origem ou destino da animacao, poe um fundo highlight no jogador
         if id_jogador == no_origem:
-            pygame.draw.circle(tela, AMARELO, pos_centro, 65)
+            pygame.draw.circle(tela, RED, pos_centro, 70)
         elif id_jogador == no_destino:
-            pygame.draw.circle(tela, PRETO, pos_centro, 65)
+            pygame.draw.circle(tela, PRETO, pos_centro, 70)
             
         rect_img = img.get_rect(center=pos_centro)
         tela.blit(img, rect_img)
