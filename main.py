@@ -1,6 +1,9 @@
 import pygame
 import sys
-from grafos import Grafo, Vertice
+from logica.grafos import Grafo, Vertice
+from logica import dijkstra, reconstruct_path
+from ui import draw_soccer_field, draw_connections, draw_shortest_path
+from ui.constantes import WIDTH, WHITE, GREEN, DARK_GREEN, GRAY, RED, YELLOW, BLUE, BLACK
 
 # configs basicas do pygame
 WIDTH, HEIGHT = 800, 600
@@ -55,125 +58,6 @@ def montar_time():
     grafo.adicionar_aresta("Centroavante", "Ponta Direita", 35)
 
     return grafo
-
-def get_min_distance_node(distances, unvisited):
-    # varre as distâncias dos nós ainda não visitados
-    min_dist = float('infinity')
-    min_node = None
-    
-    # Compara a distância salva pra descobrir qual tem o passe mais "rápido" até agora
-    for no in unvisited:
-        if distances[no] < min_dist:
-            min_dist = distances[no]
-            min_node = no
-            
-    return min_node
-
-def dijkstra(graph, start_name, end_name):
-    # logica principal de achar o caminho
-    distancias = {v.id: float('infinity') for v in graph}
-    distancias[start_name] = 0
-    predecessores = {v.id: None for v in graph}
-    
-    nao_visitados = [v.id for v in graph]
-    
-    while nao_visitados:
-        # Chama a função que tem no passo 3
-        no_atual = get_min_distance_node(distancias, nao_visitados)
-        
-        if no_atual is None or distancias[no_atual] == float('infinity'):
-            break # Não tem mais como avançar
-            
-        vertice_atual = graph.vertices[no_atual] # Puxando da estrutura da Marys
-        
-        # Simulação do relaxamento de arestas
-        for vizinho_id, peso in vertice_atual.vizinhos.items():
-            if vizinho_id in nao_visitados:
-                nova_dist = distancias[no_atual] + peso
-                if nova_dist < distancias[vizinho_id]:
-                    distancias[vizinho_id] = nova_dist
-                    predecessores[vizinho_id] = no_atual
-                    
-        nao_visitados.remove(no_atual)
-        
-        # Otimização: Se já chegou no destino, pode parar
-        if no_atual == end_name:
-            break
-            
-    return predecessores
-
-def reconstruct_path(predecessors, start_name, end_name):
-    # reconstrução do caminho ótimo
-    caminho_tracado = []
-    no_atual = end_name
-    
-    # Voltamos a lista de trás pra frente (do destino para a origem)
-    while no_atual is not None:
-        caminho_tracado.insert(0, no_atual)
-        if no_atual == start_name:
-            break
-        no_atual = predecessors.get(no_atual)
-        
-    # Validando se ele de fato conseguiu achar um caminho que conecte a origem e o fim
-    if caminho_tracado[0] == start_name:
-        return caminho_tracado
-    else:
-        return []
-
-def draw_soccer_field(screen):
-    screen.fill(GREEN)
-    
-    # Campo exterior
-    pygame.draw.rect(screen, WHITE, (50, 50, 700, 500), 3)
-    
-    # Linha do meio campo
-    pygame.draw.line(screen, WHITE, (400, 50), (400, 550), 3)
-    
-    # Circulo central
-    pygame.draw.circle(screen, WHITE, (400, 300), 70, 3)
-    pygame.draw.circle(screen, WHITE, (400, 300), 5)
-    
-    # Grande área esquerda
-    pygame.draw.rect(screen, WHITE, (50, 150, 150, 300), 3)
-    # Pequena área esquerda
-    pygame.draw.rect(screen, WHITE, (50, 225, 50, 150), 3)
-    # Ponto do penalti esquerdo
-    pygame.draw.circle(screen, WHITE, (160, 300), 4)
-    # Meia lua esquerda
-    pygame.draw.arc(screen, WHITE, (130, 250, 100, 100), -1.57, 1.57, 3)
-
-    # Grande área direita
-    pygame.draw.rect(screen, WHITE, (600, 150, 150, 300), 3)
-    # Pequena área direita
-    pygame.draw.rect(screen, WHITE, (700, 225, 50, 150), 3)
-    # Ponto do penalti direito
-    pygame.draw.circle(screen, WHITE, (640, 300), 4)
-    # Meia lua direita
-    pygame.draw.arc(screen, WHITE, (570, 250, 100, 100), 1.57, 4.71, 3)
-
-
-def draw_connections(screen, graph, pos_dict):
-    # desenha as linhas cinzas pra mostrar os passes que da pra fazer
-    for vertice in graph:
-        pos_origem = pos_dict[vertice.id]
-        for vizinho_id in vertice.vizinhos.keys():
-            pos_destino = pos_dict[vizinho_id]
-            pygame.draw.line(screen, GRAY, pos_origem, pos_destino, 2)
-
-def draw_shortest_path(screen, path, pos_dict):
-    # destaque do Caminho Ótimo
-    if path:
-        for i in range(len(path) - 1):
-            no_atual = path[i]
-            proximo_no = path[i+1]
-            
-            pos_origem = pos_dict[no_atual]
-            pos_destino = pos_dict[proximo_no]
-            
-            # Linha amarela super grossa com borda
-            pygame.draw.line(screen, BLACK, pos_origem, pos_destino, 8)
-            pygame.draw.line(screen, YELLOW, pos_origem, pos_destino, 4)
-
 
 def main():
     pygame.init()
