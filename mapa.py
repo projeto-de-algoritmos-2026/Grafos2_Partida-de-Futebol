@@ -1,6 +1,6 @@
 import pygame
 from logica.grafos import Grafo, Vertice
-from logica import dijkstra, reconstruct_path
+from logica import dijkstra, reconstruct_path, calcular_distancia
 from ui import draw_soccer_field, draw_connections, draw_shortest_path, desenha_campo
 from ui.constantes import LARGURA, ALTURA, RED, PRETO
 
@@ -8,6 +8,8 @@ imgs = {}
 tamanho_img = (120, 120)
 tamanho_img_goleiro = (120, 100)
 
+jogador_selecionado = None
+offset_x, offset_y = 0, 0
 no_origem = None
 no_destino = None
 caminho_calculado = []
@@ -43,28 +45,34 @@ posicoes = {
     'PE':   (1150, 650)
 }
 
-def montar_time(posicoes_dit):
+def montar_time(posicoes):
     grafo = Grafo()
-    for pos in posicoes_dit.keys():
-        grafo.adicionar_vertice(Vertice(pos))
 
-    grafo.adicionar_aresta("GL_A", "ZE", 10)
-    grafo.adicionar_aresta("GL_A", "ZD", 10)
-    grafo.adicionar_aresta("ZD", "ZE", 5)
-    grafo.adicionar_aresta("ZE", "LE", 15)
-    grafo.adicionar_aresta("ZD", "LD", 15)
-    grafo.adicionar_aresta("ZD", "VOL", 20)
-    grafo.adicionar_aresta("ZE", "VOL", 20)
-    grafo.adicionar_aresta("LD", "MD", 25)
-    grafo.adicionar_aresta("LE", "ME", 25)
-    grafo.adicionar_aresta("MD", "VOL", 15)
-    grafo.adicionar_aresta("ME", "VOL", 15)
-    grafo.adicionar_aresta("ME", "PE", 30)
-    grafo.adicionar_aresta("MD", "PD", 30)
-    grafo.adicionar_aresta("ME", "CA", 40)
-    grafo.adicionar_aresta("MD", "CA", 40)
-    grafo.adicionar_aresta("CA", "PE", 35)
-    grafo.adicionar_aresta("CA", "PD", 35)
+    for nome_jogador in posicoes.keys():
+        grafo.adicionar_vertice(Vertice(nome_jogador))
+
+    def conectar(j1, j2):
+        peso = calcular_distancia(posicoes[j1], posicoes[j2])
+
+        grafo.adicionar_aresta(j1, j2, peso)
+
+    conectar("GL_A", "ZE")
+    conectar("GL_A", "ZD")
+    conectar("ZD", "ZE")
+    conectar("ZE", "LE")
+    conectar("ZD", "LD")
+    conectar("ZD", "VOL")
+    conectar("ZE", "VOL")
+    conectar("LD", "MD")
+    conectar("LE", "ME")
+    conectar("MD", "VOL")
+    conectar("ME", "VOL")
+    conectar("ME", "PE")
+    conectar("MD", "PD")
+    conectar("ME", "CA")
+    conectar("MD", "CA")
+    conectar("CA", "PE")
+    conectar("CA", "PD")
     return grafo
 
 grafo_oficial = montar_time(posicoes)
@@ -102,6 +110,27 @@ while rodando:
                             no_destino = None
                             caminho_calculado = []
 
+                        jogador_selecionado = id_jogador
+                        offset_x = centro[0] - pos_mouse[0]
+                        offset_y = centro[1] - pos_mouse[1]
+                        break
+        
+        elif evento.type == pygame.MOUSEMOTION:
+            if jogador_selecionado is not None:
+                nova_x = pos_mouse[0] + offset_x
+                nova_y = pos_mouse[1] + offset_y
+                posicoes[jogador_selecionado] = (nova_x, nova_y)
+
+        elif evento.type == pygame.MOUSEBUTTONUP:
+            if evento.button == 1:
+                if jogador_selecionado:
+                    grafo_oficial = montar_time(posicoes)
+                    
+                    if no_origem and no_destino:
+                        pred = dijkstra(grafo_oficial, no_origem, no_destino)
+                        caminho_calculado = reconstruct_path(pred, no_origem, no_destino)
+                    
+                    jogador_selecionado = None
     desenha_campo(tela)
 
     draw_connections(tela, grafo_oficial, posicoes)
