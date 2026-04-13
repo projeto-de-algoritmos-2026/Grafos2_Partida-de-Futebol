@@ -1,7 +1,7 @@
 import pygame
 from logica.grafos import Grafo, Vertice
 from logica import dijkstra, reconstruct_path, calcular_distancia
-from ui import draw_soccer_field, draw_connections, draw_shortest_path, desenha_campo
+from ui import draw_soccer_field, draw_connections, draw_shortest_path, desenha_campo, draw_ball
 from ui.constantes import LARGURA, ALTURA, RED, PRETO
 
 imgs = {}
@@ -13,6 +13,10 @@ offset_x, offset_y = 0, 0
 no_origem = None
 no_destino = None
 caminho_calculado = []
+
+# Animação da bola ao longo do caminho
+animacao_progresso = 0.0   # varia de 0 até len(caminho)-1
+VELOCIDADE_ANIMACAO = 0.04  # avanço por frame (~1.5s por segmento a 60fps)
 
 pygame.init()
 
@@ -99,16 +103,19 @@ while rodando:
                             no_origem = id_jogador
                             no_destino = None
                             caminho_calculado = []
+                            animacao_progresso = 0.0
                         elif no_destino is None and id_jogador != no_origem:
                             no_destino = id_jogador
 
                             pred = dijkstra(grafo_oficial, no_origem, no_destino)
                             caminho_calculado = reconstruct_path(pred, no_origem, no_destino)
+                            animacao_progresso = 0.0
                         else:
                             # Reseta para uma nova busca começando do proximo clicado
                             no_origem = id_jogador
                             no_destino = None
                             caminho_calculado = []
+                            animacao_progresso = 0.0
 
                         jogador_selecionado = id_jogador
                         offset_x = centro[0] - pos_mouse[0]
@@ -129,6 +136,7 @@ while rodando:
                     if no_origem and no_destino:
                         pred = dijkstra(grafo_oficial, no_origem, no_destino)
                         caminho_calculado = reconstruct_path(pred, no_origem, no_destino)
+                        animacao_progresso = 0.0
                     
                     jogador_selecionado = None
     desenha_campo(tela)
@@ -147,6 +155,24 @@ while rodando:
             
         rect_img = img.get_rect(center=pos_centro)
         tela.blit(img, rect_img)
+
+    # Animação da bola percorrendo o caminho mais curto
+    if len(caminho_calculado) > 1:
+        num_segmentos = len(caminho_calculado) - 1
+        animacao_progresso += VELOCIDADE_ANIMACAO
+        if animacao_progresso >= num_segmentos:
+            animacao_progresso = 0.0
+
+        segmento = int(animacao_progresso)
+        t = animacao_progresso - segmento
+
+        no_a = caminho_calculado[segmento]
+        no_b = caminho_calculado[segmento + 1]
+        pos_a = posicoes[no_a]
+        pos_b = posicoes[no_b]
+        bola_x = int(pos_a[0] + (pos_b[0] - pos_a[0]) * t)
+        bola_y = int(pos_a[1] + (pos_b[1] - pos_a[1]) * t)
+        draw_ball(tela, (bola_x, bola_y))
 
     pygame.display.flip()
     clock.tick(60)

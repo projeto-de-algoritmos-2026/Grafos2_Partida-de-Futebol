@@ -55,6 +55,23 @@ def draw_shortest_path(screen, path, pos_dict):
             pygame.draw.line(screen, BLACK, pos_origem, pos_destino, 8)
             pygame.draw.line(screen, YELLOW, pos_origem, pos_destino, 4)
 
+def draw_ball(screen, pos):
+    radius = 14
+    # Sombra
+    pygame.draw.circle(screen, (20, 20, 20), (pos[0] + 3, pos[1] + 4), radius)
+    # Bola branca
+    pygame.draw.circle(screen, WHITE, pos, radius)
+    # Contorno preto
+    pygame.draw.circle(screen, BLACK, pos, radius, 2)
+    # Ponto central (pentágono central de uma bola de futebol)
+    pygame.draw.circle(screen, BLACK, pos, 4)
+    # Listras estilo bola de futebol
+    cx, cy = pos
+    pygame.draw.line(screen, BLACK, (cx - 6, cy - 6), (cx - 2, cy - 10), 1)
+    pygame.draw.line(screen, BLACK, (cx + 6, cy - 6), (cx + 2, cy - 10), 1)
+    pygame.draw.line(screen, BLACK, (cx - 8, cy + 2), (cx - 5, cy + 7), 1)
+    pygame.draw.line(screen, BLACK, (cx + 8, cy + 2), (cx + 5, cy + 7), 1)
+
 def desenha_campo(tela):
     tela.fill(VERDE_CAMPO)
 
