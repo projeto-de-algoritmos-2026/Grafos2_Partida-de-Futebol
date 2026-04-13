@@ -159,12 +159,14 @@ while rodando:
     # Animação da bola percorrendo o caminho mais curto
     if len(caminho_calculado) > 1:
         num_segmentos = len(caminho_calculado) - 1
-        animacao_progresso += VELOCIDADE_ANIMACAO
-        if animacao_progresso >= num_segmentos:
-            animacao_progresso = 0.0
+        
+        if animacao_progresso < num_segmentos:
+            animacao_progresso += VELOCIDADE_ANIMACAO
+        
+        progresso_limitado = min(animacao_progresso, num_segmentos - 0.0001)
 
-        segmento = int(animacao_progresso)
-        t = animacao_progresso - segmento
+        segmento = int(progresso_limitado)
+        t = progresso_limitado - segmento
 
         no_a = caminho_calculado[segmento]
         no_b = caminho_calculado[segmento + 1]
