@@ -46,11 +46,3 @@ pip install -r requirements.txt
 4. **Visualizar**: O sistema destacará o caminho de passes que minimiza a distância total percorrida pela bola.
 
 ## 📝 Outros 
- git pull origin main --no-rebase
-From https://github.com/projeto-de-algoritmos-2026/G53_Grafos_PA-26.1
- * branch            main       -> FETCH_HEAD
-Updating f82985e..b7316c4
-error: Your local changes to the following files would be overwritten by merge:
-        README.md
-Please commit your changes or stash them before you merge.
-Aborting
