@@ -51,7 +51,7 @@ O próximo passo é definir o destino da bola. O sistema então calcula e exibe 
 </div>
 
 ## 🎥 Video
-<!-- [Apresentação]() -->
+[![Texto alternativo](caminho/para/imagem.jpg)](Link_do_Video_ou_Arquivo)
 
 ## 🛠️ Instalação 
 Linguagem: Python 3<br>
